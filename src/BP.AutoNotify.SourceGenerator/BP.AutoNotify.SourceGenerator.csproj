@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- NOTE; Check $(SolutionDir)/Directory.Build.Props for generic project configurations! -->
+  <PropertyGroup>
+    <!-- NOTE(2021-06-20); Generators require netstandard2.0 and langver>9.0 -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+
+    <!-- NOTE; The build output is packaged like an analyzer, see below -->
+    <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\*.scriban"/>
+    <EmbeddedResource Include="Templates\*.scriban"/>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="Scriban" Version="[4.0.1,5.0)">
+      <!-- NOTE; Mark as development-only package -->
+      <PrivateAssets>all</PrivateAssets>
+      <!-- NOTE; Use custom target to reference assemblies into our own nuget package. -->
+      <PackForGenerator>true</PackForGenerator>
+      <!-- 
+        NOTE; Construct an MSBuild variable holding the path to the package cache for this dependency. 
+        The path variable key is constructed like this; PKG[PackageName, but dots are replaced by underscores]
+        ->PKGScriban<-
+      -->
+      <!--<GeneratePathProperty>true</GeneratePathProperty>-->
+    </PackageReference>
+
+    <ProjectReference Include="..\BP.AutoNotify.Abstractions\BP.AutoNotify.Abstractions.csproj">
+      <!-- 
+        NOTE; We make use of the project ourselves.
+        Also, our consumers should reference the project too! (NuGet automatically handles dependency handling)
+      -->
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <!-- NOTE; Use custom target to reference assemblies into our own nuget package. -->
+      <PackForGenerator>true</PackForGenerator>
+    </ProjectReference>
+
+    <!-- NOTE; We manually package the built library for NuGet. -->
+    <None Include="$(OutputPath)$(AssemblyName).dll">
+      <Pack>true</Pack>
+      <PackagePath>analyzers/dotnet/cs</PackagePath>
+      <Visible>false</Visible>
+    </None>
+  </ItemGroup>
+</Project>
