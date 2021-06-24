@@ -13,6 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- 
+      NOTE; Template files are included into final binary as EmbeddedResource so they don't need to be accounted 
+      for during build and pack.
+    -->
     <None Remove="Templates\*.scriban"/>
     <EmbeddedResource Include="Templates\*.scriban"/>
   </ItemGroup>

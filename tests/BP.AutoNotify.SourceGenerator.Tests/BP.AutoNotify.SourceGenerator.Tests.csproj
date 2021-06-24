@@ -10,8 +10,8 @@
 
   <ItemGroup>
     <!-- WARN; Automated defaults require us to do this full dance of build list manipulations. -->
-    <None Remove="Resources\**\*.cs"/>
-    <Compile Remove="Resources\**\*.cs"/>
+    <None Remove="Resources\**\*.cs" />
+    <Compile Remove="Resources\**\*.cs" />
     <Content Include="Resources\**\*.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -40,8 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BP.AutoNotify.Abstractions\BP.AutoNotify.Abstractions.csproj" />
-    <ProjectReference Include="..\BP.AutoNotify.SourceGenerator\BP.AutoNotify.SourceGenerator.csproj">
+    <ProjectReference Include="..\..\src\BP.AutoNotify.Abstractions\BP.AutoNotify.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\BP.AutoNotify.SourceGenerator\BP.AutoNotify.SourceGenerator.csproj">
       <!-- WARN; Project is NOT included as an analyzer! We're manually going to run the generator object. -->
     </ProjectReference>
   </ItemGroup>
